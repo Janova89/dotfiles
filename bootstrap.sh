@@ -15,18 +15,28 @@ else
   exit 1
 fi
 
-echo "==> Step 2: check Nix flakes"
+echo "==> Step 2: configure Nix flakes"
 
-if ! nix --extra-experimental-features "nix-command flakes" \
-  flake metadata "$DIR" >/dev/null 2>&1; then
+NIX_CONFIG_DIR="$HOME/.config/nix"
+NIX_CONFIG_FILE="$NIX_CONFIG_DIR/nix.conf"
 
-  echo "ERROR: Nix flakes are not enabled."
-  echo
-  echo "Enable them in ~/.config/nix/nix.conf:"
-  echo
-  echo "    experimental-features = nix-command flakes"
-  echo
-  exit 1
+mkdir -p "$NIX_CONFIG_DIR"
+
+if [ -f "$NIX_CONFIG_FILE" ] && \
+  grep -qE '^[[:space:]]*experimental-features[[:space:]]*=.*\bflakes\b' "$NIX_CONFIG_FILE"; then
+  echo "    flakes already enabled"
+else
+  echo "    enabling nix-command and flakes"
+
+  if [ -f "$NIX_CONFIG_FILE" ]; then
+    printf '\n%s\n' \
+      'experimental-features = nix-command flakes' \
+      >> "$NIX_CONFIG_FILE"
+  else
+    printf '%s\n' \
+      'experimental-features = nix-command flakes' \
+      > "$NIX_CONFIG_FILE"
+  fi
 fi
 
 echo "==> Step 3: symlink this repo to ~/.dotfiles"
@@ -61,13 +71,12 @@ fi
 
 echo "==> Step 5: build Home Manager configuration"
 
-nix --extra-experimental-features "nix-command flakes" \
-  build "$DIR#homeConfigurations.$REAL_USER.activationPackage"
+nix build \
+  "$DIR#homeConfigurations.$REAL_USER.activationPackage"
 
 echo "==> Step 6: activate Home Manager configuration"
 
-nix --extra-experimental-features "nix-command flakes" \
-  run home-manager/release-26.05 -- \
+nix run home-manager/release-26.05 -- \
   switch --flake "$DIR#$REAL_USER"
 
 echo
