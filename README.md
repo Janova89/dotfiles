@@ -1,3 +1,27 @@
+## Linux
+
+This fork also provides a Linux port of the configuration using
+Nix and Home Manager.
+
+The Linux configuration keeps the same user-level setup and dotfiles
+layout as the original macOS configuration, but replaces nix-darwin
+with standalone Home Manager.
+
+### Requirements
+
+- Fedora Linux 44
+- x86_64
+- Nix with flakes enabled
+
+### Bootstrap
+
+Clone the repository and switch to the `linux` branch:
+
+```bash
+git clone --branch linux https://github.com/<YOUR-USERNAME>/dotfiles.git
+cd dotfiles
+```
+
 # dotfiles
 
 <p align="center">
