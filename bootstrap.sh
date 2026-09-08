@@ -79,22 +79,22 @@ echo "==> Step 6: activate Home Manager configuration"
 nix run home-manager/release-26.05 -- \
   switch --flake "$DIR#$REAL_USER"
 
-echo "==> Step 7: install Pi"
-
-if command -v pi >/dev/null 2>&1; then
-  echo "    pi already installed, skipping"
-else
-  echo "    installing Pi"
-  curl -fsSL https://pi.dev/install.sh | sh
-fi
-
-if ! command -v pi >/dev/null 2>&1; then
-  echo "ERROR: Pi was installed but 'pi' is not available in PATH."
-  echo "       Open a new shell and verify the Pi installation."
-  exit 1
-fi
-
-echo "    $(pi --version)"
+#echo "==> Step 7: install Pi"
+#
+#if command -v pi >/dev/null 2>&1; then
+#  echo "    pi already installed, skipping"
+#else
+#  echo "    installing Pi"
+#  curl -fsSL https://pi.dev/install.sh | sh
+#fi
+#
+#if ! command -v pi >/dev/null 2>&1; then
+#  echo "ERROR: Pi was installed but 'pi' is not available in PATH."
+#  echo "       Open a new shell and verify the Pi installation."
+#  exit 1
+#fi
+#
+#echo "    $(pi --version)"
 
 echo "==> Step 8: install Herdr"
 
