@@ -16,7 +16,6 @@ in
     lazygit
     neovim
     nerd-fonts.hack
-    wezterm
     claude-code
   ];
 
