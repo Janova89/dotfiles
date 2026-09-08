@@ -16,6 +16,9 @@ in
     lazygit
     neovim
     nerd-fonts.hack
+    wezterm
+    claude-code
+    herdr
   ];
 
   fonts.fontconfig.enable = true;
