@@ -79,6 +79,35 @@ echo "==> Step 6: activate Home Manager configuration"
 nix run home-manager/release-26.05 -- \
   switch --flake "$DIR#$REAL_USER"
 
+echo "==> Step 7: configure Zsh as login shell"
+
+ZSH="$(command -v zsh)"
+
+if [ -z "$ZSH" ]; then
+  echo "ERROR: zsh was not found after Home Manager activation"
+  exit 1
+fi
+
+CURRENT_SHELL="$(getent passwd "$USER" | cut -d: -f7)"
+
+if [ "$CURRENT_SHELL" = "$ZSH" ]; then
+  echo "    login shell already set to $ZSH"
+else
+  if ! grep -Fxq "$ZSH" /etc/shells; then
+    echo "    adding $ZSH to /etc/shells"
+
+    if ! command -v sudo >/dev/null 2>&1; then
+      echo "ERROR: sudo is required to add zsh to /etc/shells"
+      exit 1
+    fi
+
+    printf '%s\n' "$ZSH" | sudo tee -a /etc/shells >/dev/null
+  fi
+
+  echo "    changing login shell: $CURRENT_SHELL -> $ZSH"
+  chsh -s "$ZSH"
+fi
+
 echo
 echo "==> Done."
 echo "    Use ./rebuild.sh for future changes."
