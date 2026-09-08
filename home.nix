@@ -7,7 +7,7 @@ in
   home.username = user;
   home.homeDirectory = "/home/${user}";
   home.stateVersion = "24.11";
-
+  nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     ripgrep
     fd
@@ -18,7 +18,6 @@ in
     nerd-fonts.hack
     wezterm
     claude-code
-    herdr
   ];
 
   fonts.fontconfig.enable = true;
