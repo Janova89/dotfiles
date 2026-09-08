@@ -96,7 +96,16 @@ fi
 
 echo "    $(pi --version)"
 
-echo "==> Step 8: configure Zsh as login shell"
+echo "==> Step 8: install Herdr"
+
+if command -v herdr >/dev/null 2>&1; then
+  echo "    herdr already installed, skipping"
+else
+  echo "    installing Herdr"
+  curl -fsSL https://herdr.dev/install.sh | sh
+fi
+
+echo "==> Step 9: configure Zsh as login shell"
 
 ZSH="$(command -v zsh)"
 
